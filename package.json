@@ -1,0 +1,23 @@
+{
+  "name": "mingma-site",
+  "version": "1.0.0",
+  "description": "麻明 Ming Ma, personal site: the career as a drive through four gears.",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "build:fonts": "node tools/build.mjs --fonts",
+    "build:debug": "node tools/build.mjs --debug",
+    "serve": "python3 -m http.server 8787 --directory dist"
+  },
+  "keywords": [],
+  "author": "麻明",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "gsap": "^3.15.1",
+    "lenis": "^1.3.27",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

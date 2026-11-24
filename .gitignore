@@ -1,0 +1,19 @@
+# dependencies and local tooling
+node_modules/
+tools/.venv/
+
+# compiled output is built on demand (locally, or by GitHub Actions when publishing)
+dist/
+docs/
+
+# local editor / agent state
+.mimosa/
+.v2c/
+.video_agent/
+.DS_Store
+*.log
+
+# font sources are re-downloaded, the subsets inside src/assets/fonts are committed
+tools/fonts-src/
+tools/.glyphs.txt
+tools/.noto-subset.otf
