@@ -186,7 +186,6 @@ html[data-theme="night"] .lamp-opt:first-child,html[data-theme="day"] .lamp-opt:
 .drive-pin{max-width:none;margin:0 auto;padding:clamp(72px,10vh,140px) 0 clamp(56px,8vh,112px)}
 .drive.is-pinned .drive-pin{display:flex;flex-direction:column;justify-content:center;gap:clamp(12px,2.2vh,28px);height:100vh;height:100svh;padding:calc(var(--nav-h) + 4px) 0 0;overflow:hidden}
 .drive-head,.drive-rail{margin-right:var(--pad);margin-left:var(--pad)}
-.drive-head p{margin-top:8px;max-width:42em}
 .drive-rail{position:relative;height:52px}
 .rail-line{position:absolute;left:0;right:0;top:31px;height:1px;background:var(--line-2)}
 .rail-tick{position:absolute;left:calc(var(--y) / 19 * 100%);top:27px;width:1px;height:9px;background:var(--line-2)}
@@ -217,7 +216,6 @@ html[data-theme="night"] .lamp-opt:first-child,html[data-theme="day"] .lamp-opt:
 /* ---------- work (stacked dossier sheets) ---------- */
 .work{max-width:var(--max);margin:0 auto;padding:clamp(96px,14vh,180px) var(--pad) 24px}
 .work-head{margin-bottom:clamp(28px,5vh,64px)}
-.work-head p{max-width:30em}
 .sheet{--t:calc(var(--nav-h) + 16px + var(--i,0) * 12px);--dim:0;position:sticky;top:var(--t);z-index:calc(1 + var(--i,0));display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);min-height:calc(100vh - var(--t) - 20px);min-height:calc(100svh - var(--t) - 20px);margin-bottom:20px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg-2);transform-origin:50% 0;will-change:transform}
 .sheet::after{content:"";position:absolute;inset:-1px;border-radius:var(--r);background:var(--bg);opacity:var(--dim);pointer-events:none}
 .sheet{position:sticky}
@@ -286,7 +284,6 @@ html[data-theme="night"] .lamp-opt:first-child,html[data-theme="day"] .lamp-opt:
 .cap-result{display:block;margin-top:4px;color:var(--face-ink)}
 .cap-result::before{content:"改进的业务：";color:var(--lamp)}
 .method-copy h2{font-size:clamp(34px,4.2vh,64px)}
-.method-copy .sec-head p{margin-top:8px}
 .method-steps{display:grid;margin-top:clamp(8px,2vh,24px)}
 .step{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:16px;width:100%;text-align:left;padding:clamp(10px,1.9vh,26px) 4px clamp(10px,1.9vh,26px) 0;border-top:1px solid var(--line);color:var(--ink-2);opacity:.5;transform:translateX(14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .step:last-child{border-bottom:1px solid var(--line)}
@@ -389,7 +386,6 @@ html.js .hero-zh,html.js .hero-en,html.js .hero-lede,html.js .hero-sub,html.js .
   /* the display spans both rows of the stacked layout so it has room to stay pinned while the list passes */
   .method-stage{position:relative;height:min(46svh,430px);min-height:320px}
   .method-copy{margin-top:14px}
-  .method-copy .sec-head p{margin-top:6px}
   .method-copy h2{font-size:clamp(30px,5.4vw,44px)}
   .step{padding:12px 4px 12px 0}
   .step-title{font-size:clamp(22px,4.6vw,30px)}
