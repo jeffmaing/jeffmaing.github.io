@@ -308,8 +308,9 @@ html.js .ask-a.is-in{animation:card-in .4s var(--ease) both}
   .hero{grid-template-columns:1fr;align-content:center;gap:clamp(24px,4vh,40px);padding-top:calc(var(--nav-h) + 8px);padding-bottom:40px}
   .hero-title{font-size:clamp(32px,8.6vw,48px)}
   .hero-lede{font-size:clamp(16px,4.1vw,19px)}
-  .hero-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
-  .hero-facts li{grid-template-columns:1fr;gap:8px;padding:14px 0}
+  /* three figures of one kind, in a row: only the rule above them */
+  .hero-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}
+  .hero-facts li,.hero-facts li:last-child{grid-template-columns:1fr;gap:8px;padding:14px 0;border-bottom:0}
   .fact-n{font-size:clamp(40px,11vw,54px)}
   .fact-l{font-size:13px}
   .who,.how-grid,.ask-grid{grid-template-columns:1fr}
