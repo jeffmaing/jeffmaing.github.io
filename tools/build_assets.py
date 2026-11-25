@@ -42,8 +42,7 @@ def save(img, name, quality, **kw):
 
 
 # 1. Studio portrait: combine the photo with the Vision person matte, pull the edge in by a
-#    hair so no light fringe survives on a dark instrument face, then export the cut-out
-#    shown on the first screen.
+#    hair so no light fringe survives on the dark share card it is used on.
 photo = Image.open(a.portrait).convert("RGB")
 mask = Image.open(a.cutout).convert("L").resize(photo.size, Image.LANCZOS)
 # firm up the soft matte: below 60 is background, above 215 is person, feathered between
@@ -58,7 +57,6 @@ box = (max(0, xs.min() - pad), max(0, ys.min() - pad), min(cut.width, xs.max() +
 cut = cut.crop(box)
 target_h = 1600
 cut = cut.resize((round(cut.width * target_h / cut.height), target_h), Image.LANCZOS)
-save(cut, "portrait-cutout.webp", 84)
 
 # preview of the cut-out on the instrument face
 bg = Image.new("RGB", (cut.width + 160, cut.height + 80), PETROL)
@@ -123,8 +121,13 @@ tracked(d, (82, name_bottom + 22 - ming_top), "MING MA", ming_font, AMBER, 7)
 ming_bottom = name_bottom + 22 - ming_top + d.textbbox((0, 0), "MING MA", font=ming_font)[3]
 rule_top = ming_bottom + 18
 d.rectangle([82, rule_top, 172, rule_top + 3], fill=AMBER)
-d.text((80, rule_top + 36), "汽车咨询 × AI 落地", font=vf(400, 38), fill=IVORY)
-d.text((80, rule_top + 98), "辅导 → 标准 → 工具 → AI", font=vf(300, 30), fill=(169, 184, 193))
+# the owner's own claim, in his words, then one line on what he does
+claim_font = vf(700, 36)
+y = rule_top + 30
+for line in ("懂业务的没我懂 AI，", "懂 AI 的没我懂业务。"):
+    d.text((80, y), line, font=claim_font, fill=IVORY)
+    y += 52
+d.text((80, y + 10), "汽车行业 19 年 × AI 落地 · 用 AI 放大自己", font=vf(400, 26), fill=(169, 184, 193))
 path = IMG / "og.jpg"
 og.save(path, "JPEG", quality=88, optimize=True)
 print(f"{'og.jpg':34s} {W}x{H}  {path.stat().st_size / 1024:7.1f} KB")

@@ -87,6 +87,11 @@ export function initOdometers(ScrollTrigger) {
     const odo = new Odometer(el, { value: target, label: true });
     odo.set(from, { animate: false });
     odo.flush();
+    // a figure that is on screen from the start rolls once the entrance has settled
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+      window.setTimeout(() => odo.set(target, { animate: true, duration: 1.4 }), 1100);
+      return;
+    }
     ScrollTrigger.create({
       trigger: el,
       start: 'top 88%',

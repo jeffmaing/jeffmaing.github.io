@@ -29,16 +29,6 @@ export function splitReveal(selector) {
   });
 }
 
-/** A small horizontal knock, used when the drive shifts into another gear. */
-export function knock(element, direction = 1) {
-  if (!element || prefersReduced()) return;
-  gsap.fromTo(
-    element,
-    { x: 16 * direction, opacity: 0.55 },
-    { x: 0, opacity: 1, duration: 0.5, ease: 'expo.out', overwrite: true },
-  );
-}
-
 /** Fade and rise for blocks of copy. */
 export function fadeUp(selector) {
   if (prefersReduced()) return;
