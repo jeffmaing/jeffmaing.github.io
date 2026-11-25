@@ -45,11 +45,10 @@ if (args.includes('--fonts')) {
 await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 
-const versions = { three: await versionOf('three'), gsap: await versionOf('gsap'), lenis: await versionOf('lenis') };
+const versions = { gsap: await versionOf('gsap'), lenis: await versionOf('lenis') };
 const versionsText = [
   'mingma-site | (c) 2026 麻明 Ming Ma',
   'Bundled open-source software, used under their licences (full texts in THIRD-PARTY-LICENSES.txt):',
-  `  three.js r${versions.three} (c) three.js authors, MIT Licence`,
   `  GSAP ${versions.gsap} (c) GreenSock, Standard "No Charge" Licence: https://gsap.com/standard-license`,
   `  Lenis ${versions.lenis} (c) darkroom.engineering, MIT Licence`,
 ].join('\n * ');
@@ -83,7 +82,6 @@ await copyFile(path.join(src, 'favicon.svg'), path.join(out, 'favicon.svg'));
 
 // Licence notices are taken verbatim from the packages and font folders that were installed.
 const licenseFiles = [
-  ['three.js', path.join(root, 'node_modules', 'three', 'LICENSE')],
   ['Lenis', path.join(root, 'node_modules', 'lenis', 'LICENSE')],
   ['D-DIN, D-DIN Condensed, D-DIN Exp (subsetted for this site)', path.join(root, 'tools', 'fonts-src', 'ddin', 'OFL-1.1.txt')],
   ['Noto Sans SC (subsetted for this site)', path.join(root, 'tools', 'fonts-src', 'LICENSE-NOTO.txt')],
@@ -98,7 +96,7 @@ const readNotice = async (file) => {
   }
 };
 const notices = await Promise.all(licenseFiles.map(async ([label, file]) => `${label}\n${await readNotice(file)}`));
-notices.splice(2, 0, [
+notices.splice(1, 0, [
   'GSAP (bundled plugins: ScrollTrigger, SplitText)',
   'GSAP ships under the GreenSock "Standard No Charge" License.',
   'The full terms live at https://gsap.com/standard-license and are not reproduced here.',

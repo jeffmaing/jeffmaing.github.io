@@ -22,7 +22,6 @@
 <link rel="preload" href="assets/fonts/din-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/din-condensed-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/noto-sc-vf.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/img/portrait-sample.webp" as="image" type="image/webp">
 <script>
   // Set the theme before first paint so the page never flashes the wrong cabin.
   (function () {
@@ -58,9 +57,9 @@
   DIRECTION CONTRACT
   THESIS: one career read as a drive. Four phases, from the channel floor to AI products.
   OWN-WORLD: night instrument. Petrol face, ivory markings, one amber signal. DIN numerals, sans Chinese.
-  Dot-matrix portrait, drum odometers, one live cluster (gear, speed, year). Day mode is the lit cabin; the instruments stay dark.
+  The owner's portrait on an instrument face, drum odometers, one live cluster (gear, speed, year). Day mode is the lit cabin; the instruments stay dark.
   STORY: the visitor feels the phase changes, reads a résumé-faithful timeline, opens project sheets with pictures, tries each capability.
-  FIRST VIEWPORT: name and one statement on the left; a lit dot portrait in a dark display on the right;
+  FIRST VIEWPORT: name and one statement on the left; the portrait photograph in a dark frame on the right;
   the live cluster sits bottom-left; one primary action (view work) and one secondary (contact).
   FORM: pinned horizontal phase timeline, stacked dossier sheets with duotone photographs, clickable capability panels.
   Every claim follows the owner's fact base: unconfirmed figures are not published.
@@ -139,12 +138,10 @@
         <a class="btn btn-ghost" href="#contact" data-magnetic>联系</a>
       </div>
     </div>
-    <div class="hero-display" id="hero-display">
+    <figure class="hero-display" id="hero-display">
       <img class="hero-photo" src="assets/img/portrait-cutout.webp" width="916" height="1600"
            alt="麻明，深色西装，双手交叉，戴细框眼镜" decoding="async" fetchpriority="high">
-      <canvas class="hero-canvas" aria-hidden="true"></canvas>
-      <div class="lens" aria-hidden="true"></div>
-    </div>
+    </figure>
   </section>
 
   <section class="thread" id="thread" aria-label="职业主线">
@@ -834,7 +831,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <noscript>
-  <style>.cluster,.hero-canvas,.lens,.cap-flow{display:none!important}.thread .ph{opacity:1!important}.step{opacity:1!important;transform:none!important}</style>
+  <style>.cluster,.cap-flow{display:none!important}.thread .ph{opacity:1!important}.step{opacity:1!important;transform:none!important}</style>
 </noscript>
 <script src="app.js" defer></script>
 </body>
