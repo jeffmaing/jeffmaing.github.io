@@ -43,7 +43,7 @@ def save(img, name, quality, **kw):
 
 # 1. Studio portrait: combine the photo with the Vision person matte, pull the edge in by a
 #    hair so no light fringe survives on a dark instrument face, then export the cut-out
-#    used by the WebGL field.
+#    shown on the first screen.
 photo = Image.open(a.portrait).convert("RGB")
 mask = Image.open(a.cutout).convert("L").resize(photo.size, Image.LANCZOS)
 # firm up the soft matte: below 60 is background, above 215 is person, feathered between
@@ -59,10 +59,6 @@ cut = cut.crop(box)
 target_h = 1600
 cut = cut.resize((round(cut.width * target_h / cut.height), target_h), Image.LANCZOS)
 save(cut, "portrait-cutout.webp", 84)
-
-# small sampling copy for the shader (keeps the texture read cheap)
-sample = cut.resize((round(cut.width * 560 / cut.height), 560), Image.LANCZOS)
-save(sample, "portrait-sample.webp", 80)
 
 # preview of the cut-out on the instrument face
 bg = Image.new("RGB", (cut.width + 160, cut.height + 80), PETROL)
@@ -119,10 +115,16 @@ def vf(weight, size):
 
 name_font = vf(300, 168)
 d.text((76, 150), "麻明", font=name_font, fill=IVORY)
-tracked(d, (82, 346), "MING MA", ImageFont.truetype(str(ddin / "D-DINExp.otf"), 30), AMBER, 7)
-d.rectangle([82, 412, 172, 415], fill=AMBER)
-d.text((80, 448), "汽车咨询 × AI 落地", font=vf(400, 38), fill=IVORY)
-d.text((80, 510), "辅导 → 标准 → 工具 → AI", font=vf(300, 30), fill=(169, 184, 193))
+# the romanised name sits clear below the two characters, measured from where their ink ends
+name_bottom = d.textbbox((76, 150), "麻明", font=name_font)[3]
+ming_font = ImageFont.truetype(str(ddin / "D-DINExp.otf"), 30)
+ming_top = d.textbbox((0, 0), "MING MA", font=ming_font)[1]
+tracked(d, (82, name_bottom + 22 - ming_top), "MING MA", ming_font, AMBER, 7)
+ming_bottom = name_bottom + 22 - ming_top + d.textbbox((0, 0), "MING MA", font=ming_font)[3]
+rule_top = ming_bottom + 18
+d.rectangle([82, rule_top, 172, rule_top + 3], fill=AMBER)
+d.text((80, rule_top + 36), "汽车咨询 × AI 落地", font=vf(400, 38), fill=IVORY)
+d.text((80, rule_top + 98), "辅导 → 标准 → 工具 → AI", font=vf(300, 30), fill=(169, 184, 193))
 path = IMG / "og.jpg"
 og.save(path, "JPEG", quality=88, optimize=True)
 print(f"{'og.jpg':34s} {W}x{H}  {path.stat().st_size / 1024:7.1f} KB")
