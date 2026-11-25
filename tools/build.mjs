@@ -103,6 +103,23 @@ notices.splice(2, 0, [
   'GSAP ships under the GreenSock "Standard No Charge" License.',
   'The full terms live at https://gsap.com/standard-license and are not reproduced here.',
 ].join('\n'));
+// Unsplash asks for no attribution, but credit is given anyway; each picture was cropped and tinted.
+const photographs = [
+  ['p2', 'Crosby Hinze', 'photo-1643142314017-126b776f066a'],
+  ['p3', 'Akram Huseyn', 'photo-1647200527435-cc6b0e91e120'],
+  ['p4', 'Ivan Kazlouskij', 'photo-1653565217811-85b41bcd1edb'],
+  ['p5', 'Dextar Studio', 'photo-1692863211226-cbba732754c9'],
+  ['p6', 'Crosby Hinze', 'photo-1643142314913-0cf633d9bbb5'],
+  ['p8', 'fabian jones', 'photo-1644749700856-a82a92828a1b'],
+  ['p9', 'Morgan Edwards', 'photo-1622046120199-32f27980473d'],
+];
+notices.push(
+  [
+    'Photographs (illustrative pictures on the project sheets; cropped and duotoned)',
+    'Source: Unsplash. Licence: Unsplash License, https://unsplash.com/license (free to use, attribution not required).',
+    ...photographs.map(([file, artist, id]) => `  ${file}.webp  by ${artist}  https://images.unsplash.com/${id}`),
+  ].join('\n'),
+);
 await writeFile(path.join(out, 'THIRD-PARTY-LICENSES.txt'), `${['mingma-site, third-party notices', '', ...notices].join('\n\n')}\n`);
 
 await cp(path.join(src, 'assets'), path.join(out, 'assets'), { recursive: true });

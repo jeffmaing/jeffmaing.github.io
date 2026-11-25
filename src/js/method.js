@@ -1,48 +1,132 @@
-// "How I work" as four gears. Desktop pins the stage and scrolls through the four states;
-// smaller screens keep the stage stuck at the top while the steps pass beneath it.
+// "Four capabilities": click one and the display on the left shows what it meant in real work.
+// Each panel lists deliverables the owner actually produced; the active one is spelled out
+// underneath, and the list reads itself forward until the visitor takes over.
+// On desktop the section is pinned and scrolling walks through the four; a click moves the page
+// to the matching point, so scrolling simply carries on from the chosen capability.
+
 import gsap from 'gsap';
 import { ScrollTrigger, registerPin } from './scroll.js';
-import { env, prefersReduced, isDesktop } from './env.js';
-import { createMethodField } from './methodField.js';
+import { prefersReduced, isDesktop } from './env.js';
 import { splitReveal } from './motion.js';
 
-export function initMethod(cluster) {
+const CADENCE = 3200; // how long an item stays lit while the list reads itself
+const HOLD = 7000; // how long a hand-picked item is left alone
+
+export function initMethod(cluster, scroll) {
   const section = document.getElementById('method');
   const pin = section.querySelector('.method-pin');
+  const stage = section.querySelector('.method-stage');
   const steps = [...section.querySelectorAll('.step')];
-  const canvas = section.querySelector('.method-canvas');
-  let field = null;
+  const panels = [...section.querySelectorAll('.cap-panel')];
+  if (!steps.length || !panels.length) return;
+
+  const reduce = prefersReduced();
   let active = 0;
+  let cursor = 0;
+  let timer = 0;
+  let follow = true; // false after a click, until the page has arrived at the chosen capability
+  let pinRange = null;
 
-  if (canvas && env.webgl) {
-    try {
-      field = createMethodField(canvas);
-    } catch (error) {
-      field = null; // the four steps still read on their own
-    }
-  }
+  // every item carries its own progress line, which makes the reading order visible
+  panels.forEach((panel) => {
+    panel.hidden = false;
+    panel.querySelectorAll('.cap-item').forEach((item) => {
+      item.setAttribute('aria-pressed', 'false');
+      const bar = document.createElement('span');
+      bar.className = 'bar';
+      item.appendChild(bar);
+    });
+  });
 
-  const show = (index, notify = true) => {
-    if (index !== active) {
-      active = index;
-      steps.forEach((step, k) => step.classList.toggle('is-active', k === index));
-      if (notify) cluster.setGear(String(index + 1));
+  const stop = () => clearTimeout(timer);
+
+  const showItem = (index, animate) => {
+    const panel = panels[active];
+    const items = [...panel.querySelectorAll('.cap-item')];
+    const at = (index + items.length) % items.length;
+    items.forEach((item, k) => {
+      item.classList.toggle('is-on', k === at);
+      item.setAttribute('aria-pressed', String(k === at));
+      const bar = item.querySelector('.bar');
+      bar.style.transition = 'none';
+      bar.style.transform = 'scaleX(0)';
+    });
+    panel.querySelector('.cap-detail').textContent = items[at].dataset.detail;
+    if (animate) {
+      const bar = items[at].querySelector('.bar');
+      void bar.offsetWidth;
+      bar.style.transition = `transform ${CADENCE}ms linear`;
+      bar.style.transform = 'scaleX(1)';
     }
-    if (field) {
-      gsap.to(field.uniforms.uState, {
-        value: index,
-        duration: 0.9,
-        ease: 'power3.inOut',
-        overwrite: true,
-        onUpdate: () => field.kick(),
-      });
+    cursor = at;
+  };
+
+  const read = (delay = CADENCE) => {
+    stop();
+    if (reduce) return;
+    timer = setTimeout(() => {
+      showItem(cursor + 1, true);
+      read();
+    }, delay);
+  };
+
+  const show = (index, { fromScroll = false, notify = true } = {}) => {
+    const changed = index !== active;
+    if (!fromScroll) follow = false;
+    active = index;
+    panels.forEach((panel, k) => panel.classList.toggle('is-on', k === index));
+    steps.forEach((step, k) => {
+      step.classList.toggle('is-active', k === index);
+      step.setAttribute('aria-pressed', String(k === index));
+    });
+    if (notify) cluster.setGear(String(index + 1));
+    showItem(0, !reduce);
+    read();
+    if (changed && !reduce) {
+      gsap.fromTo(
+        panels[index].querySelectorAll('.cap-flow span, .cap-item'),
+        { y: 10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.035, ease: 'expo.out', overwrite: true, clearProps: 'transform,opacity' },
+      );
     }
   };
 
-  steps[0]?.classList.add('is-active');
+  steps.forEach((step, index) =>
+    step.addEventListener('click', () => {
+      show(index);
+      if (pinRange) {
+        const reach = pinRange.start + ((pinRange.end - pinRange.start) * index) / (steps.length - 1);
+        scroll?.toY(reach);
+        setTimeout(() => {
+          follow = true;
+        }, 1400);
+      } else {
+        // stacked layouts have the switches below the display, so bring the display back when a
+        // choice would otherwise happen out of sight
+        const box = stage.getBoundingClientRect();
+        const bar = document.getElementById('nav')?.offsetHeight ?? 0;
+        if (box.top < bar || box.bottom > window.innerHeight) scroll?.to(stage, -(bar + 10));
+      }
+    }),
+  );
 
-  // Entering the section: the method belongs to the present, so the clock returns to today
-  // and the gearbox drops back to the step in view.
+  panels.forEach((panel) =>
+    panel.addEventListener('click', (event) => {
+      const item = event.target.closest('.cap-item');
+      if (!item) return;
+      showItem([...panel.querySelectorAll('.cap-item')].indexOf(item), false);
+      read(HOLD);
+    }),
+  );
+
+  // resting the pointer on the display pauses the reading; leaving resumes it
+  stage.addEventListener('pointerenter', stop);
+  stage.addEventListener('pointerleave', () => read());
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => (entries[0].isIntersecting ? read() : stop())).observe(section);
+  }
+
+  // Entering the section: the capabilities belong to the present, so the clock returns to today.
   ScrollTrigger.create({
     trigger: section,
     start: 'top 60%',
@@ -54,18 +138,8 @@ export function initMethod(cluster) {
     },
   });
 
-  if (isDesktop() && !prefersReduced()) {
-    // One continuous state across the pin: the dots travel between formations as you scroll.
-    const onUpdate = (self) => {
-      if (field) gsap.to(field.uniforms.uState, { value: self.progress * 3, duration: 0.5, ease: 'power2.out', overwrite: true, onUpdate: () => field.kick() });
-      const index = Math.max(0, Math.min(3, Math.round(self.progress * 3)));
-      if (index !== active) {
-        active = index;
-        steps.forEach((step, k) => step.classList.toggle('is-active', k === index));
-        cluster.setGear(String(index + 1));
-      }
-    };
-    const created = ScrollTrigger.create({
+  if (isDesktop() && !reduce) {
+    pinRange = ScrollTrigger.create({
       trigger: section,
       start: 'top top',
       end: '+=230%',
@@ -74,35 +148,16 @@ export function initMethod(cluster) {
       refreshPriority: 1,
       anticipatePin: 1,
       scrub: true,
-      onUpdate,
-    });
-    registerPin(section, created);
-  } else {
-    // Without the pin, the active step is the last one that has crossed a reference line,
-    // which reads the same going up as going down.
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top 70%',
-      end: 'bottom 20%',
-      onToggle: (self) => {
-        if (self.isActive) cluster.setYear(2026);
-      },
-      onUpdate: () => {
-        const line = window.innerHeight * 0.7;
-        let index = 0;
-        steps.forEach((step, k) => {
-          if (step.getBoundingClientRect().top < line) index = k;
-        });
-        show(index);
+      onUpdate: (self) => {
+        if (!follow) return;
+        const index = Math.max(0, Math.min(steps.length - 1, Math.round(self.progress * (steps.length - 1))));
+        if (index !== active) show(index, { fromScroll: true });
       },
     });
+    registerPin(section, pinRange);
   }
 
-  let resizeTimer = 0;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => field?.layout(), 180);
-  });
-
+  show(0, { notify: false });
+  follow = true; // the opening state is not a choice; scrolling drives it from the start
   splitReveal('#method h2');
 }

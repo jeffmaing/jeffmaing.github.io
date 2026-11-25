@@ -58,12 +58,20 @@ function start() {
   initThread();
   initDrive(cluster);
   initWork(cluster);
-  initMethod(cluster);
+  initMethod(cluster, scroll);
   initAbout();
 
-  // webfonts change line heights, so measure again once they are in
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(() => ScrollTrigger.refresh());
+  // Webfonts change line heights, so every position is measured again once they are really in.
+  // fonts.ready can resolve before a lazily used face has even started loading, so each face is
+  // requested explicitly; the window's own load event is the last word.
+  const refresh = () => ScrollTrigger.refresh();
+  window.addEventListener('load', refresh, { once: true });
+  if (document.fonts?.load) {
+    const faces = ['300 1em "Noto SC"', '400 1em "Noto SC"', '500 1em "Noto SC"', '700 1em "Noto SC"', '400 1em "DIN"', '700 1em "DIN"', '700 1em "DIN Cond"', '400 1em "DIN Exp"'];
+    Promise.all(faces.map((face) => document.fonts.load(face).catch(() => null)))
+      .then(refresh)
+      .then(() => new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 400))))
+      .then(refresh);
   }
 
   // Debug builds only (the build inlines the flag and removes this branch from the published bundle).

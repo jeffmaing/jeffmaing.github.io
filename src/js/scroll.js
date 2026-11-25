@@ -56,6 +56,14 @@ export function initScroll() {
         window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
       }
     },
+    /** Glide to an absolute scroll position (used to bring a pinned section to a chosen point). */
+    toY(top) {
+      if (lenis) {
+        lenis.scrollTo(top, { duration: 1.2, easing: (t) => 1 - Math.pow(1 - t, 4) });
+      } else {
+        window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    },
   };
 }
 
