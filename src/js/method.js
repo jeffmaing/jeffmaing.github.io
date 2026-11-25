@@ -51,7 +51,10 @@ export function initMethod(cluster, scroll) {
       bar.style.transition = 'none';
       bar.style.transform = 'scaleX(0)';
     });
-    panel.querySelector('.cap-detail').textContent = items[at].dataset.detail;
+    // each entry says what was done, and which business it improved
+    const detail = panel.querySelector('.cap-detail');
+    detail.querySelector('.cap-what').textContent = items[at].dataset.what;
+    detail.querySelector('.cap-result').textContent = items[at].dataset.result;
     if (animate) {
       const bar = items[at].querySelector('.bar');
       void bar.offsetWidth;
