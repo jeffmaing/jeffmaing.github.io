@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>自建工作流工具 · 麻明</title>
+  <meta name="description" content="用自建工具跟踪投标机会、查询知识并汇总日报。">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    try {
+      const theme = localStorage.getItem('mm-theme');
+      if (theme === 'day' || theme === 'night') document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
+</head>
+<body class="case-detail">
+  <main class="case-page">
+    <nav class="case-top" aria-label="案例导航">
+      <a href="index.html#workflow-tools">← 返回项目案例</a>
+      <a href="index.html#contact">交流项目需求</a>
+    </nav>
+
+    <header class="case-intro">
+      <p class="sheet-meta">自主开发</p>
+      <h1>自建工作流工具</h1>
+      <p class="case-deck">把每天重复查找、整理和汇总的工作交给自建工具。</p>
+    </header>
+
+    <nav class="case-roles case-three-steps" aria-label="项目简介">
+      <ol>
+        <li><a href="#stage-1"><strong>跟踪机会</strong><span>集中筛选投标项目</span></a></li>
+        <li><a href="#stage-2"><strong>查询知识</strong><span>在本地知识库里找资料</span></a></li>
+        <li><a href="#stage-3"><strong>汇总日报</strong><span>把重复汇总放进固定流程</span></a></li>
+      </ol>
+    </nav>
+
+    <figure class="case-image">
+        <a href="assets/img/bid-monitor-review.webp" target="_blank" rel="noopener">
+          <img src="assets/img/bid-monitor-review.webp" width="919" height="432" alt="投标机会监控系统的项目列表、筛选和来源状态" loading="lazy" decoding="async">
+        </a>
+        <figcaption>投标机会监控 · 本地系统截图</figcaption>
+      </figure>
+
+    <section class="case-section" id="stage-1">
+      <h2>集中筛选投标项目</h2>
+      <p>投标机会监控工具把发现的项目集中到一个列表，支持筛选，并显示来源状态。截图展示本地运行界面。</p>
+    </section>
+
+    <section class="case-section" id="stage-2">
+      <h2>在本地知识库里找资料</h2>
+      <p>我用 AI 协助搭建本地部署的私有知识库，用于团队查询内部知识。</p>
+    </section>
+
+    <section class="case-section" id="stage-3">
+      <h2>把重复汇总放进固定流程</h2>
+      <p>我搭建日报 Agent，用于汇总日报。知识库、日报和投标监控是不同使用场景，分别按实际任务搭建。</p>
+    </section>
+
+    <footer class="case-bottom">
+      <a class="btn btn-solid" href="index.html#contact">交流类似项目</a>
+      <a href="index.html#workflow-tools">返回项目案例</a>
+    </footer>
+  </main>
+</body>
+</html>

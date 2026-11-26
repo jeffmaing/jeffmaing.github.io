@@ -77,7 +77,9 @@ const css = await readFile(path.join(src, 'css', 'main.css'), 'utf8');
 const minified = await transform(css, { loader: 'css', minify });
 await writeFile(path.join(out, 'styles.css'), minified.code);
 
-await copyFile(path.join(src, 'index.html'), path.join(out, 'index.html'));
+for (const page of (await readdir(src)).filter((name) => name.endsWith('.html'))) {
+  await copyFile(path.join(src, page), path.join(out, page));
+}
 await copyFile(path.join(src, 'favicon.svg'), path.join(out, 'favicon.svg'));
 
 // Licence notices are taken verbatim from the packages and font folders that were installed.
